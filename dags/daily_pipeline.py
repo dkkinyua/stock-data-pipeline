@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
+DB_URL = os.getenv("DB_URL")
 default_args = {
     'owner': 'deecodes',
     'retries': 5,
@@ -63,7 +64,7 @@ def extract_data():
     @task
     def load_to_db(df):
         try:
-           engine = create_engine(url="postgresql://avnadmin:AVNS_6R6wTVPJlYNzgjqLkEW@pg-18b913ee-denzel-kinyua.h.aivencloud.com:12287/defaultdb?sslmode=require")
+           engine = create_engine(url=DB_URL)
            df.to_sql(name='daily_stock_data', con=engine, index=False, if_exists='replace')
            print("Data loaded into table successfully")
         except Exception as e:
