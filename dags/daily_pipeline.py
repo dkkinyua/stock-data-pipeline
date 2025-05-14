@@ -59,7 +59,6 @@ def extract_data():
 
         except Exception as e:
             print(f"requests Error: {str(e)}")
-
     # Loading task
     @task
     def load_to_db(df):
