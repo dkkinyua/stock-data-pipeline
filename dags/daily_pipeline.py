@@ -1,6 +1,5 @@
 # DAG to extract daily, monthly and weekly data from AlphaVantage
 import os
-import json
 import requests
 import pandas as pd
 from airflow.decorators import dag, task
@@ -49,8 +48,10 @@ def extract_data():
             try:
                 df = pd.DataFrame(today_data)
                 print(df.info())
+                df["Date"] = pd.to_datetime(df["Date"]) # sets "Date" column as a datetime object
+                df.set_index("Date", inplace=True)# sets "Date" column as the index
+                df.astype({"Open": "float", "High": "float", "Low": "float", "Close": "float", "Volume": "float"}) #Change column dtypes
                 print(df.dtypes)
-                df.set_index("Date", inplace=True) # sets "Date" column as the index
                 return df
 
             except Exception as e:
@@ -64,7 +65,7 @@ def extract_data():
     def load_to_db(df):
         try:
            engine = create_engine(url=DB_URL)
-           df.to_sql(name='daily_stock_data', con=engine, index=False, if_exists='replace')
+           df.to_sql(name='daily_stock_data', con=engine, if_exists='append') #append data to db if table exists
            print("Data loaded into table successfully")
         except Exception as e:
             print(f"Loading DataFrame error: {str(e)}")

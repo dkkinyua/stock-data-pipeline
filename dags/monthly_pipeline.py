@@ -1,12 +1,14 @@
 import os
-import json
 import requests
+import pandas as pd
 from airflow.decorators import dag, task
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
+DB_URL= os.getenv("DB_URL")
 default_args = {
     'owner': 'deecodes',
     'retry_delay': timedelta(minutes=3),
@@ -21,38 +23,40 @@ def extract_monthly_data():
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            monthly_close = data['Meta Data']['3. Last Refreshed'] # Refresh date
-            month = data["Monthly Adjusted Time Series"][monthly_close]
-            monthly_data = {
-                'Date': monthly_close,
-                'Open': month["1. open"],
-                'High': month["2. high"],
-                'Low': month["3. low"],
-                'Close': month["4. close"],
-                'Adjusted Close': month["5. adjusted close"],
-                'Volume': month["6. volume"],
-                'Dividend Amount': month["7. dividend amount"]
-            }
-
-            filepath = '/home/deecodes/stock-data-pipeline/docs/monthly_data.json'
-            # Check if filepath exists
-            try:
-                if os.path.exists(filepath):
-                    with open(filepath, 'r') as f:
-                        existing_data = json.load(f)
-                else:
-                    existing_data = [] # Initialize an empty list if file doesn't exist
-                existing_data.append(monthly_data) # Append monthly_data to existing_data
-
-                # Write to file
-                with open(filepath, 'w') as f:
-                    json.dump(existing_data, f, indent=2)
-                print(f"Data loaded to {filepath} successfully!")
-            except Exception as e:
-                print(f"Error: {str(e)}")
+            return data # returns unclean data in JSON form
         else:
             print(f"Error: {response.status_code}")
 
-    extract_data()
+    @task
+    def transform_data(data):
+        monthly_close = data['Meta Data']['3. Last Refreshed'] # Refresh date
+        month = data["Monthly Adjusted Time Series"][monthly_close]
+        df = pd.DataFrame({
+            'Date': monthly_close,
+            'Open': [month["1. open"]],
+            'High': [month["2. high"]],
+            'Low': [month["3. low"]],
+            'Close': [month["4. close"]],
+            'Adjusted Close': [month["5. adjusted close"]],
+            'Volume': [month["6. volume"]],
+        })
+
+        df["Date"] = pd.to_datetime(df["Date"])
+        df.astype({"Open": "float", "High": "float", "Low": "float", "Close": "float", "Adjusted Close": "float", "Volume": "float"})
+        df.set_index("Date", inplace=True) # Set data as the index
+        return df
+    
+    @task
+    def load_to_db(df):
+        try:
+            engine = create_engine(url=DB_URL)
+            df.to_sql(name="weekly_stock_data", con=engine, if_exists='append')
+            print("Data loaded into database successfully!") # Append data if table exists
+        except Exception as e:
+            print(f"Load data error: {str(e)}")
+
+    data = extract_data()
+    df = transform_data(data)
+    load_to_db(df)
 
 monthly_dag = extract_monthly_data()
