@@ -59,7 +59,7 @@ your_env\Scripts\activate # Windows
 ```
 When your virtual environment is active, the environment name will show next to your directory in the terminal as shown in the snapshot below:
 
-![Environment Variable Snapshot](https://asset.cloudinary.com/depbmpoam/c16e187935f9262bacae601d0c74408d)
+![Environment Variable Snapshot](https://res.cloudinary.com/depbmpoam/image/upload/v1747393560/Screenshot_2025-05-16_135754_ijppfw.png)
 
 ### 3. Install the required dependencies.
 
@@ -239,4 +239,18 @@ To run this DAG, go to the Airflow UI in the browser and unpause the DAG.
 
 ![DAG overview](https://res.cloudinary.com/depbmpoam/image/upload/v1747396683/Screenshot_2025-05-16_145738_kqj0fi.png)
 
-Head over to `extract_daily_data`
+Head over to `daily_data_pipeline_dag` and click on the Play button to run your DAG.
+
+![Running your Daily DAG](https://res.cloudinary.com/depbmpoam/image/upload/v1747396993/Screenshot_2025-05-16_150250_l3ntua.png)
+
+If your DAG run is successful, the dails column on your DAG page will have the 'Success' status. Check your Graph view to check if your tasks executed as expected. For more information, check your tasks' Event Log view.
+
+![DAG Success Run Graph View](https://res.cloudinary.com/depbmpoam/image/upload/v1747397141/Screenshot_2025-05-16_150524_ct3wh2.png)
+
+To check if your `load_to_db` task loaded the data successfully, check your table in the database to confirm.
+
+![Postgres Check](https://res.cloudinary.com/depbmpoam/image/upload/v1747397335/Screenshot_2025-05-16_150838_zos6ch.png)
+
+## Conclusion
+
+If you would want to contribute any further, email me on denzelkinyua11@gmail.com
