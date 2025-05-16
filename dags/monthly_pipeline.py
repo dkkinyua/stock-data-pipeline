@@ -15,7 +15,7 @@ default_args = {
     'retries': 5
 }
 
-@dag(dag_id='extract_monthly_data', default_args=default_args, start_date=datetime(2025, 5, 14), schedule='@monthly', catchup=False)
+@dag(dag_id='monthly_data_pipeline_dag', default_args=default_args, start_date=datetime(2025, 5, 14), schedule='@monthly', catchup=False)
 def extract_monthly_data():
     @task
     def extract_data():

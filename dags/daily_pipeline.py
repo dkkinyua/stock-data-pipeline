@@ -16,7 +16,7 @@ default_args = {
     'retry_delay': timedelta(minutes=3)
 }
 
-@dag(dag_id='extract_daily_data', default_args=default_args, start_date=datetime(2025, 5, 13), schedule_interval='@daily', catchup=False)
+@dag(dag_id='daily_data_pipeline_dag', default_args=default_args, start_date=datetime(2025, 5, 13), schedule_interval='@daily', catchup=False)
 def extract_data():
     # Extract data from API
     @task

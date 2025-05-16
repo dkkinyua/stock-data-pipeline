@@ -15,7 +15,7 @@ default_args = {
     'retry_delay': timedelta(minutes=3)
 }
 
-@dag(dag_id='extract_weekly_data', default_args=default_args, schedule='@weekly', start_date=datetime(2025, 5, 13))
+@dag(dag_id='weekly_data_pipeline_dag', default_args=default_args, schedule='@weekly', start_date=datetime(2025, 5, 13))
 def extract_weekly_data():
     @task
     def extract_data():
