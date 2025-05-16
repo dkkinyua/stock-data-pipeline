@@ -239,18 +239,19 @@ To run this DAG, go to the Airflow UI in the browser and unpause the DAG.
 
 ![DAG overview](https://res.cloudinary.com/depbmpoam/image/upload/v1747396683/Screenshot_2025-05-16_145738_kqj0fi.png)
 
-Head over to `daily_data_pipeline_dag` and click on the Play button to run your DAG.
+Head over to `daily_pipeline_dag` and run the DAG using the Play button on the right side of your screen.
 
-![Running your Daily DAG](https://res.cloudinary.com/depbmpoam/image/upload/v1747396993/Screenshot_2025-05-16_150250_l3ntua.png)
+![Run DAG](https://res.cloudinary.com/depbmpoam/image/upload/v1747396993/Screenshot_2025-05-16_150250_l3ntua.png)
 
-If your DAG run is successful, the dails column on your DAG page will have the 'Success' status. Check your Graph view to check if your tasks executed as expected. For more information, check your tasks' Event Log view.
+If your DAG run is successful, the Details tab on your Airflow UI will have status as 'success' indicating that the DAG run was successful. Check your Graph View tab to check if your tasks ran as expected and check task sequence.
+![Task Sequence](https://res.cloudinary.com/depbmpoam/image/upload/v1747397141/Screenshot_2025-05-16_150524_ct3wh2.png)
 
-![DAG Success Run Graph View](https://res.cloudinary.com/depbmpoam/image/upload/v1747397141/Screenshot_2025-05-16_150524_ct3wh2.png)
+Check if your data was loaded successfully in your database. Head over to your database and check if yor data was loaded successfully.
 
-To check if your `load_to_db` task loaded the data successfully, check your table in the database to confirm.
-
-![Postgres Check](https://res.cloudinary.com/depbmpoam/image/upload/v1747397335/Screenshot_2025-05-16_150838_zos6ch.png)
+![Postgres check](https://res.cloudinary.com/depbmpoam/image/upload/v1747397335/Screenshot_2025-05-16_150838_zos6ch.png)
 
 ## Conclusion
 
-If you would want to contribute any further, email me on denzelkinyua11@gmail.com
+we have gone through the project structure, setup and through one of the DAGs, checked its setup and how to trigger a run manually from the Airflow UI.
+
+If you have any contributions or improvements, request a pull request or email me at denzelkinyua11@gmail.com
