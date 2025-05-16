@@ -59,7 +59,7 @@ your_env\Scripts\activate # Windows
 ```
 When your virtual environment is active, the environment name will show next to your directory in the terminal as shown in the snapshot below:
 
-![Environment Variable Snapshot](https://asset.cloudinary.com/depbmpoam/c16e187935f9262bacae601d0c74408d)
+![Environment Variable Snapshot](https://res.cloudinary.com/depbmpoam/image/upload/v1747393560/Screenshot_2025-05-16_135754_ijppfw.png)
 
 ### 3. Install the required dependencies.
 
